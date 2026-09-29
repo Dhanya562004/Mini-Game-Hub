@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Game Hub 🎮 | Modern Arcade Experience</title>
+  <meta name="description" content="A modern, high-performance web game hub featuring Tic Tac Toe, Memory Card Match, and RGB Color Master built with vanilla HTML, CSS, and JavaScript.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Confetti Canvas overlay -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <div id="app-container">
+
+    <!-- Top App Navigation Header -->
+    <header class="app-header">
+      <div class="brand-logo" data-target-view="home">
+        <span class="brand-icon">🎮</span>
+        <span class="brand-title">Mini Game Hub</span>
+        <span class="brand-badge">Pro Edition</span>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-btn active" data-target-view="home">
+          <span>🏠</span> Home
+        </button>
+        <button class="nav-btn" data-target-view="tictactoe">
+          <span>❌</span> Tic Tac Toe
+        </button>
+        <button class="nav-btn" data-target-view="memory">
+          <span>🎴</span> Memory Cards
+        </button>
+        <button class="nav-btn" data-target-view="color">
+          <span>🎨</span> Color RGB
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn active" id="sound-toggle-btn" title="Toggle Sound FX">
+          🔊
+        </button>
+      </div>
+    </header>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1: HOMEPAGE -->
+    <!-- =================================================================== -->
+    <main id="view-home" class="view-section active">
+      <section class="hero-section">
+        <h1 class="hero-title">Welcome to Mini Game Hub 🎮</h1>
+        <p class="hero-subtitle">
+          Experience slick, high-fps arcade games crafted with pure HTML, CSS & JavaScript. Pick a game below and test your skills!
+        </p>
+
+        <!-- Stats Overview Banner -->
+        <div class="stats-banner">
+          <div class="stat-item">
+            <span class="stat-icon">🎮</span>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-total-played">0</span>
+              <span class="stat-label">Games Played</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">❌</span>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-ttt-wins">0</span>
+              <span class="stat-label">Tic Tac Toe Wins</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">⚡</span>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-mem-best">--</span>
+              <span class="stat-label">Memory Best Time</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">🔥</span>
+            <div class="stat-info">
+              <span class="stat-value" id="stat-color-streak">0 🔥</span>
+              <span class="stat-label">Color Best Streak</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 Featured Game Cards -->
+      <section class="games-grid">
+        <!-- Game Card 1: Tic Tac Toe -->
+        <div class="game-card card-ttt" data-target-view="tictactoe">
+          <div class="card-header-icon">❌</div>
+          <span class="game-card-tag">Strategy • 2 Player & AI</span>
+          <h2 class="game-card-title">Tic Tac Toe</h2>
+          <p class="game-card-desc">
+            Classic 3x3 strategy grid. Battle local friends or test your brain against our unbeatable Minimax AI!
+          </p>
+          <div class="play-card-btn">
+            <span>Play Now</span>
+            <span class="btn-arrow">➔</span>
+          </div>
+        </div>
+
+        <!-- Game Card 2: Memory Card Game -->
+        <div class="game-card card-memory" data-target-view="memory">
+          <div class="card-header-icon">🎴</div>
+          <span class="game-card-tag">Puzzle • Brain Trainer</span>
+          <h2 class="game-card-title">Memory Cards</h2>
+          <p class="game-card-desc">
+            Test your visual recall! 3D flipping cards, difficulty levels, move counter, and speed timer.
+          </p>
+          <div class="play-card-btn">
+            <span>Play Now</span>
+            <span class="btn-arrow">➔</span>
+          </div>
+        </div>
+
+        <!-- Game Card 3: Color Guessing Game -->
+        <div class="game-card card-color" data-target-view="color">
+          <div class="card-header-icon">🎨</div>
+          <span class="game-card-tag">Arcade • RGB Color Vision</span>
+          <h2 class="game-card-title">RGB Color Master</h2>
+          <p class="game-card-desc">
+            Match exact RGB color codes to vibrant swatches. Build win streaks and climb the leaderboard!
+          </p>
+          <div class="play-card-btn">
+            <span>Play Now</span>
+            <span class="btn-arrow">➔</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: TIC TAC TOE -->
+    <!-- =================================================================== -->
+    <section id="view-tictactoe" class="view-section">
+      <div class="game-wrapper">
+        <div class="game-top-bar">
+          <div class="game-title-group">
+            <span style="font-size: 2rem;">❌</span>
+            <h2>Tic Tac Toe</h2>
+          </div>
+          <button class="back-home-btn" data-target-view="home">
+            <span>🏠</span> Back to Hub
+          </button>
+        </div>
+
+        <!-- Mode selector -->
+        <div class="mode-selector">
+          <button class="mode-btn active" data-ttt-mode="pvp">👥 2 Players</button>
+          <button class="mode-btn" data-ttt-mode="ai-easy">🤖 Easy AI</button>
+          <button class="mode-btn" data-ttt-mode="ai-minimax">⚡ Unbeatable AI</button>
+        </div>
+
+        <!-- Status & Score Header -->
+        <div class="game-stats-header">
+          <div class="score-box">
+            <span class="label">Player X</span>
+            <span class="val" id="score-ttt-x">0</span>
+          </div>
+          <div class="score-box">
+            <span class="label">Draws</span>
+            <span class="val" id="score-ttt-draw">0</span>
+          </div>
+          <div class="score-box">
+            <span class="label">Player O</span>
+            <span class="val" id="score-ttt-o">0</span>
+          </div>
+        </div>
+
+        <div class="ttt-status-banner" id="ttt-status">Player X's Turn</div>
+
+        <!-- 3x3 Grid -->
+        <div class="ttt-grid-container">
+          <div class="ttt-grid">
+            <div class="ttt-cell" data-index="0"></div>
+            <div class="ttt-cell" data-index="1"></div>
+            <div class="ttt-cell" data-index="2"></div>
+            <div class="ttt-cell" data-index="3"></div>
+            <div class="ttt-cell" data-index="4"></div>
+            <div class="ttt-cell" data-index="5"></div>
+            <div class="ttt-cell" data-index="6"></div>
+            <div class="ttt-cell" data-index="7"></div>
+            <div class="ttt-cell" data-index="8"></div>
+          </div>
+        </div>
+
+        <div class="ttt-controls">
+          <button class="btn-primary" id="ttt-restart-btn">
+            <span>🔄</span> Restart Match
+          </button>
+          <button class="btn-secondary" id="ttt-reset-score-btn">
+            Reset Scores
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 3: MEMORY CARD GAME -->
+    <!-- =================================================================== -->
+    <section id="view-memory" class="view-section">
+      <div class="game-wrapper">
+        <div class="game-top-bar">
+          <div class="game-title-group">
+            <span style="font-size: 2rem;">🎴</span>
+            <h2>Memory Card Match</h2>
+          </div>
+          <button class="back-home-btn" data-target-view="home">
+            <span>🏠</span> Back to Hub
+          </button>
+        </div>
+
+        <!-- Options: Difficulty & Theme -->
+        <div class="memory-options">
+          <div class="mode-selector" style="margin-bottom: 0;">
+            <button class="mode-btn active" data-mem-diff="easy">Easy (4x3)</button>
+            <button class="mode-btn" data-mem-diff="medium">Medium (4x4)</button>
+            <button class="mode-btn" data-mem-diff="hard">Hard (6x4)</button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">Theme:</span>
+            <select id="memory-theme-select" style="background: rgba(0,0,0,0.3); color: var(--text-main); border: 1px solid var(--border-glass); padding: 0.4rem 0.8rem; border-radius: 10px; font-family: var(--font-body); outline: none;">
+              <option value="gaming">👾 Gaming</option>
+              <option value="emojis">🦄 Emojis</option>
+              <option value="food">🍕 Delicious</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="game-stats-header">
+          <div class="score-box">
+            <span class="label">Moves</span>
+            <span class="val" id="memory-moves">0</span>
+          </div>
+          <div class="score-box">
+            <span class="label">Timer</span>
+            <span class="val" id="memory-timer">00:00</span>
+          </div>
+          <div class="score-box">
+            <span class="label">Matches</span>
+            <span class="val" id="memory-pairs">0/6</span>
+          </div>
+        </div>
+
+        <!-- Card Grid -->
+        <div class="memory-grid-container">
+          <div id="memory-grid" class="memory-grid easy">
+            <!-- Dynamically populated cards -->
+          </div>
+        </div>
+
+        <button class="btn-primary" id="memory-reset-btn">
+          <span>🔄</span> Reset Cards
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 4: COLOR GUESSING GAME -->
+    <!-- =================================================================== -->
+    <section id="view-color" class="view-section">
+      <div class="game-wrapper">
+        <div class="game-top-bar">
+          <div class="game-title-group">
+            <span style="font-size: 2rem;">🎨</span>
+            <h2>RGB Color Master</h2>
+          </div>
+          <button class="back-home-btn" data-target-view="home">
+            <span>🏠</span> Back to Hub
+          </button>
+        </div>
+
+        <!-- Difficulty Mode Selector -->
+        <div class="mode-selector">
+          <button class="mode-btn active" data-color-mode="easy">Easy (3 Colors)</button>
+          <button class="mode-btn" data-color-mode="hard">Hard (6 Colors)</button>
+        </div>
+
+        <!-- Target RGB Display -->
+        <div class="color-target-box">
+          <div class="color-target-label">Guess the RGB Color:</div>
+          <div class="color-rgb-display" id="color-target-display">RGB(255, 255, 255)</div>
+        </div>
+
+        <!-- Stats Header -->
+        <div class="game-stats-header" style="max-width: 480px;">
+          <div class="score-box">
+            <span class="label">Current Streak</span>
+            <span class="val" id="color-curr-streak">0</span>
+          </div>
+          <div class="score-box">
+            <span class="label">Best Streak</span>
+            <span class="val" id="color-high-streak">0</span>
+          </div>
+        </div>
+
+        <!-- Feedback message -->
+        <div class="color-feedback-msg" id="color-feedback">Select the matching color shade!</div>
+
+        <!-- Swatch Container -->
+        <div id="color-grid" class="color-grid easy">
+          <!-- Swatches dynamically generated -->
+        </div>
+
+        <button class="btn-primary" id="color-reset-btn">
+          <span>🔄</span> New Colors
+        </button>
+      </div>
+    </section>
+
+    <!-- Modal Popup for Victory/Info -->
+    <div class="modal-overlay" id="game-modal">
+      <div class="modal-box">
+        <div class="modal-icon" id="modal-icon">🏆</div>
+        <h2 class="modal-title" id="modal-title">Victory!</h2>
+        <p class="modal-desc" id="modal-desc">You completed the challenge!</p>
+        <button class="btn-primary" id="modal-close-btn" style="width: 100%;">
+          Continue Playing
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Mini Game Hub 🎮 &bull; Crafted with <span>❤</span> using Pure HTML, CSS & JavaScript</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
